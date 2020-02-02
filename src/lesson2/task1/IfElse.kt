@@ -63,7 +63,13 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String = TODO()
+fun ageDescription(age: Int): String {
+    return when {
+        (age % 10 == 1 && age % 100 != 11) -> "$age год"
+        ((age % 10 in 2..4) && (age % 100 !in 12..14)) -> "$age года"
+        else -> "$age лет"
+    }
+}
 
 /**
  * Простая
@@ -110,6 +116,19 @@ fun rookOrBishopThreatens(
 ): Int = TODO()
 
 /**
+ * Вспомогательная
+ *
+ * Возварщает максимальное значение из 3х чисел
+ */
+fun max3(a: Double, b: Double, c: Double): Double {
+    return when {
+        (a >= b && a >= c) -> a
+        (b >= a && b >= c) -> b
+        else -> c
+    }
+}
+
+/**
  * Простая
  *
  * Треугольник задан длинами своих сторон a, b, c.
@@ -117,14 +136,34 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    if (max3(a, b, c) > a + b + c - max3(a, b, c))
+        return -1
+
+    val angleCosB: Double = (1.0 * a * a + c * c - b * b) / (2 * a * c)
+    val angleCosC: Double = (1.0 * a * a + b * b - c * c) / (2 * a * b)
+    val angleCosA: Double = (1.0 * b * b + c * c - a * a) / (2 * b * c)
+
+    return when {
+        (angleCosA == 0.0 || angleCosB == 0.0 || angleCosC == 0.0) -> 1
+        (angleCosA > 0.0 && angleCosB > 0.0 && angleCosC > 0) -> 0
+        else -> 2
+    }
+}
 
 /**
  * Средняя
  *
  * Даны четыре точки на одной прямой: A, B, C и D.
- * Координаты точек a, b, c, d соответственно, b >= a, d >= c.
+ * Координаты точек a, b, c, d соответственно, b >= a, d >= c и пусть все координаты >= 0
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
+    return when {
+        // с отрицательными координатами пришлось бы еще на знаки проверять
+        c in a until (b + 1) -> if (d < b) d - c else b - c
+        a in c until (d + 1) -> if (d < b) d - a else b - a
+        else -> -1
+    }
+}
