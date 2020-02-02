@@ -59,6 +59,42 @@ fun circleInside(
 }
 
 /**
+ * Вспомогательная
+ *
+ * Возварщает минимальное значение из 2х целых чисел
+ */
+fun min2(a: Int, b: Int): Int {
+    return when {
+        (a < b) -> a
+        else -> b
+    }
+}
+
+/**
+ * Вспомогательная
+ *
+ * Возварщает минимальное значение из 3х целых чисел
+ */
+fun min3(a: Int, b: Int, c: Int): Int = when {
+    (a <= b && a <= c) -> a
+    (b <= a && b <= c) -> b
+    else -> c
+}
+
+/**
+ * Вспомогательная
+ *
+ * Возварщает среднее значение из 3х целых чисел
+ */
+fun mid3(a: Int, b: Int, c: Int): Int {
+    return when {
+        ((a in b..c) || (a in c..b)) -> a
+        ((b in a..c) || (b in c..a)) -> b
+        else -> c
+    }
+}
+
+/**
  * Средняя
  *
  * Определить, пройдет ли кирпич со сторонами а, b, c сквозь прямоугольное отверстие в стене со сторонами r и s.
@@ -67,4 +103,10 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = TODO()
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
+    val wholeMin: Int = min2(r, s)
+    val brickMin: Int = min3(a, b, c)
+
+    return !(wholeMin < brickMin || mid3(a, b, c) > r + s - wholeMin)
+}
+
