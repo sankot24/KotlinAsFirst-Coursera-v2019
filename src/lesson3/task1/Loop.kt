@@ -10,11 +10,10 @@ import kotlin.math.sqrt
  * Вычисление факториала
  */
 fun factorial(n: Int): Double {
-    var result = 1.0
-    for (i in 1..n) {
-        result = result * i // Please do not fix in master
-    }
-    return result
+    if (n == 0 || n == 1)
+        return 1.0
+
+    return n * factorial(n - 1)
 }
 
 /**
@@ -75,7 +74,11 @@ fun digitNumber(n: Int): Int = TODO()
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int {
+    if (n == 2 || n == 1)
+        return 1;
+    return fib(n - 1) + fib(n - 2)
+}
 
 /**
  * Простая
@@ -164,7 +167,15 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var dst: Int = 0; //
+    var tmp: Int = n;
+    while (tmp > 0) {
+        dst = dst * 10 + tmp % 10;
+        tmp /= 10
+    }
+    return dst // Результат
+}
 
 /**
  * Средняя
@@ -188,6 +199,22 @@ fun isPalindrome(n: Int): Boolean = TODO()
 fun hasDifferentDigits(n: Int): Boolean = TODO()
 
 /**
+ * Вспомогательная
+ *
+ * Считает количество цифр в числе.
+ */
+fun numCounter(n: Int): Int {
+    var count: Int = 0;
+    var num: Int = n;
+
+    while (num > 0) {
+        num /= 10;
+        count++;
+    }
+    return count;
+}
+
+/**
  * Сложная
  *
  * Найти n-ю цифру последовательности из квадратов целых чисел:
@@ -196,7 +223,24 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var count: Int = 0
+    var i: Int = 1
+    while (count < n) {
+        count += numCounter(i * i++)
+    }
+    i = (i - 1) * (i - 1)
+    return if (count == n)
+        i % 10
+    else {
+        var d: Int = 0
+        while (count-- + 1 != n) {
+            d = i % 10
+            i /= 10
+        }
+        d
+    }
+}
 
 /**
  * Сложная
@@ -207,4 +251,21 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var count: Int = 0
+    var i: Int = 1
+    while (count < n) {
+        count += numCounter(fib(i++))
+    }
+    i = fib(i - 1)
+    return if (count == n)
+        i % 10
+    else {
+        var d: Int = 0
+        while (count-- + 1 != n) {
+            d = i % 10
+            i /= 10
+        }
+        d
+    }
+}
