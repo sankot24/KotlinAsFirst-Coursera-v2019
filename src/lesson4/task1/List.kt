@@ -239,10 +239,167 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
 fun roman(n: Int): String = TODO()
 
 /**
+ * Вспомогательная
+ *
+ * Функция записывающая единицы
+ */
+fun units(n: Int): String {
+    return when (n % 10) {
+        1 -> "один"
+        2 -> "два"
+        3 -> "три"
+        4 -> "четыре"
+        5 -> "пять"
+        6 -> "шесть"
+        7 -> "семь"
+        8 -> "восемь"
+        9 -> "девять"
+        else -> ""
+    }
+}
+
+/**
+ * Вспомогательная
+ *
+ * Функция записывающая десятки и числа второго десятка(11, 12, ... 19)
+ */
+
+fun decades(n: Int): String {
+    return when (n / 10 % 10) {
+        1 -> when (n % 10) {
+            1 -> "одиннадцать"
+            2 -> "двенадцать"
+            3 -> "тринадцать"
+            4 -> "четырнадцать"
+            5 -> "пятнадцать"
+            6 -> "шестнадцать"
+            7 -> "семнадцать"
+            8 -> "восемнадцать"
+            9 -> "девятнадцать"
+            else -> "десять"
+        }
+        2 -> "двадцать " + units(n)
+        3 -> "тридцать " + units(n)
+        4 -> "сорок " + units(n)
+        5 -> "пятьдесят " + units(n)
+        6 -> "шестьдесят " + units(n)
+        7 -> "семьдесят " + units(n)
+        8 -> "восемьдесят " + units(n)
+        9 -> "девяносто " + units(n)
+        else -> "" + units(n)
+    }
+}
+
+/**
+ * Вспомогательная
+ *
+ * Функция записывающая сотни
+ */
+
+fun hundreds(n: Int): String {
+    return when (n / 100 % 10) {
+        1 -> "сто " + decades(n)
+        2 -> "двести " + decades(n)
+        3 -> "триста " + decades(n)
+        4 -> "четыреста " + decades(n)
+        5 -> "пятьсот " + decades(n)
+        6 -> "шестьсот " + decades(n)
+        7 -> "семьсот " + decades(n)
+        8 -> "восемьсот " + decades(n)
+        9 -> "девятьсот " + decades(n)
+        else -> "" + decades(n)
+    }
+}
+
+/**
+ * Вспомогательная
+ *
+ * Функция записывающая тысячи
+ */
+
+fun thousands(n: Int): String {
+    return when (n / 1000 % 10) {
+        1 -> "одна тысяча " + hundreds(n)
+        2 -> "две тысячи " + hundreds(n)
+        3 -> "три тысячи " + hundreds(n)
+        4 -> "четыре тысячи " + hundreds(n)
+        5 -> "пять тысяч " + hundreds(n)
+        6 -> "шесть тысяч " + hundreds(n)
+        7 -> "семь тысяч " + hundreds(n)
+        8 -> "восемь тысяч " + hundreds(n)
+        9 -> "девять тысяч " + hundreds(n)
+        else -> "тысяч " + hundreds(n)
+    }
+}
+
+/**
+ * Вспомогательная
+ *
+ * Функция записывающая десятки тысяч
+ */
+fun tensThousands(n: Int): String {
+    return when (n / 10000 % 10) {
+        1 -> decades(n / 1000) + " тысяч " + hundreds(n)
+        2 -> "двадцать " + thousands(n)
+        3 -> "тридцать " + thousands(n)
+        4 -> "сорок " + thousands(n)
+        5 -> "пятьдесят " + thousands(n)
+        6 -> "шестьдесят " + thousands(n)
+        7 -> "семьдесят " + thousands(n)
+        8 -> "восемьдесят " + thousands(n)
+        9 -> "девяносто " + thousands(n)
+        else -> "" + thousands(n)
+    }
+}
+
+/**
+ * Вспомогательная
+ *
+ * Функция записывающая сотни тысяч
+ */
+fun hundredsThousands(n: Int): String {
+    return when (n / 100000 % 10) {
+        1 -> "сто " + tensThousands(n)
+        2 -> "двести " + tensThousands(n)
+        3 -> "триста " + tensThousands(n)
+        4 -> "четыреста " + tensThousands(n)
+        5 -> "пятьсот " + tensThousands(n)
+        6 -> "шестьсот " + tensThousands(n)
+        7 -> "семьсот " + tensThousands(n)
+        8 -> "восемьсот " + tensThousands(n)
+        9 -> "девятьсот " + tensThousands(n)
+        else -> "" + tensThousands(n)
+    }
+}
+
+fun numCounter(n: Int): Int {
+    var count: Int = 0;
+    var num: Int = n;
+
+    while (num > 0) {
+        num /= 10;
+        count++;
+    }
+    return count;
+}
+/**
  * Очень сложная
  *
  * Записать заданное натуральное число 1..999999 прописью по-русски.
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    var str: String = when (numCounter(n)) {
+        2 -> decades(n)
+        3 -> hundreds(n)
+        4 -> thousands(n)
+        5 -> tensThousands(n)
+        6 -> hundredsThousands(n)
+        else -> units(n)
+    }
+    if (str[str.length - 1] == ' ')
+        str = str.dropLast(1)
+
+    return str
+}
