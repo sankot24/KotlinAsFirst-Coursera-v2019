@@ -2,6 +2,11 @@
 
 package lesson5.task1
 
+import ru.spbstu.kotlin.generate.util.firstInstanceOf
+import java.lang.Integer.min
+import kotlin.math.max
+import kotlin.collections.sorted as sorted1
+
 /**
  * Пример
  *
@@ -91,7 +96,16 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
+fun buildGrades(grades: Map<String, Int>): Map<Int, MutableList<String>> {
+    val res = mutableMapOf<Int, MutableList<String>>()
+    for ((name, mark) in grades) {
+        if (res.contains(mark))
+            res[mark]?.plusAssign(name)
+        else
+            res.put(mark, mutableListOf<String>(name))
+    }
+    return res
+}
 
 /**
  * Простая
@@ -119,7 +133,14 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
  *   subtractOf(a = mutableMapOf("a" to "z"), mapOf("a" to "z"))
  *     -> a changes to mutableMapOf() aka becomes empty
  */
-fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit = TODO()
+fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
+    val tmp = mutableMapOf<String, String>()
+    for ((key, value) in a)
+        if (b.containsKey(key) && value == b[key])
+            tmp.put(key, value)
+    for ((key, value) in tmp)
+        a.remove(key, value)
+}
 
 /**
  * Простая
@@ -147,7 +168,18 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    val tmp = mutableMapOf<String, String>()
+    tmp.putAll(mapA)
+    for ((key, value) in mapB)
+        if (tmp.containsKey(key)) {
+            if (value != tmp[key])
+                tmp[key] += ", $value"
+        } else
+            tmp[key] = value
+
+    return tmp
+}
 
 /**
  * Средняя
@@ -257,8 +289,32 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    if (list.isEmpty())
+        return Pair<Int, Int>(-1, -1)
+    for (l in list)
+        if (l > number)
+            continue;
+        else
+            if (list.contains(number - l) && number - l != number / 2)
+                return Pair<Int, Int>(
+                    min(list.indexOf(l), list.indexOf(number - l)),
+                    max(list.indexOf(l), list.indexOf(number - l))
+                )
+    if (number % 2 == 0)
+        if (list.lastIndexOf(number / 2) != list.indexOf(number / 2))
+            return Pair<Int, Int>(
+                list.indexOf(number / 2),
+                list.lastIndexOf(number / 2)
+            )
 
+    return Pair<Int, Int>(-1, -1)
+}
+
+
+/*fun elGrouping(bag: MutableSet<String>, count: Int, start: Int): Set<List<String>> {
+    for ()
+}*/
 /**
  * Очень сложная
  *
@@ -280,4 +336,36 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val top = mutableSetOf<String>()
+    var topCost: Int = 0
+    val bag = mutableSetOf<String>()
+    var orderGroup: Int = 2
+    /* расписываю первый самый простой проход без перебора сочетаний */
+    for ((name, param) in treasures)
+        if (param.first <= capacity) {
+            bag += name // сумка с множеством вмещаемых элементов, для последующих шагов
+            if (param.second > topCost) {
+                top.clear()
+                top += name
+                topCost = param.second
+            }
+        }
+    /* так, хочу из списка вмещаемых предметов перебрать все сочетания по orderGroup,
+     * формирую множество элементов, считаю их вес, если не прошел, идем дальше,
+     * если прошел, добавляем группу в tmp, считаем стоимость группы,
+     * сверяем с топом, по надобности перезаписываем
+     * надо перебирать только в прямом направлении собирая группы по порядку и сдвигая ее
+     * перебор типа ABCDE -> ABC ABD ABE ACD ACE ADE BCD BCE BDE CDE
+     * после полного прогона чистим bag
+     * /
+    while (bag.size >= orderGroup) {
+        val tmp = mutableSetOf<String>()
+        val groupEl = mutableSetOf<String>()
+
+
+            bag.removeAll { it !in tmp }
+        orderGroup++
+    } */
+    return top
+}
