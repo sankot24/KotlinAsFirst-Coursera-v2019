@@ -157,7 +157,41 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    val parts = description.split(";")
+    var costMax: Float = 0F
+    var nameMax: String = ""
+
+    if (description == "")
+        return ""
+    for (p in parts) {
+        var tmp: String = p
+        if (p.first() == ' ')
+            tmp = p.removePrefix(" ")
+
+        val product = tmp.split(' ')
+        if (product.size == 2) {
+            if (product[1].toFloat() > costMax) {
+                nameMax = product[0]
+                costMax = product[1].toFloat()
+            }
+        } else if (product.size > 2) {
+            if (product[product.size - 1].toFloat() > costMax) {
+                nameMax = product.joinToString(
+                    limit = product.size - 2,
+                    separator = " ",
+                    prefix = "",
+                    postfix = "",
+                    truncated = ""
+                )
+                nameMax += product[product.size - 2]
+                costMax = product[product.size - 1].toFloat()
+            }
+        } else
+            return ""
+    }
+    return nameMax
+}
 
 /**
  * Сложная
@@ -170,8 +204,60 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    var num: Int = 0
+    // сначанла выпишу просто все значения
+    for (pos in 0..roman.length - 1) {
+        var ch = roman.length - 1 - pos
+        when (roman[ch]) {
+            'L' -> num += 50
+            'D' -> num += 500
+            'V' -> num += 5
 
+            'M' -> {
+                if (ch == roman.length - 1 || roman[ch + 1] == 'V' || roman[ch + 1] == 'I' || roman[ch + 1] == 'X' || roman[ch + 1] == 'L' || roman[ch + 1] == 'C' || roman[ch + 1] == 'D' || roman[ch + 1] == 'M') {
+                    num += 1000
+                } else return -1
+            }
+            'I' -> {
+                if (ch == roman.length - 1 || roman[ch + 1] == 'I') {
+                    num += 1
+                } else if (roman[ch + 1] == 'V' || roman[ch + 1] == 'X' || roman[ch + 1] == 'L' || roman[ch + 1] == 'C' || roman[ch + 1] == 'D' || roman[ch + 1] == 'M') {
+                    num -= 1
+                } else return -1
+            }
+            'X' -> {
+                if (ch == roman.length - 1 || roman[ch + 1] == 'V' || roman[ch + 1] == 'I' || roman[ch + 1] == 'X') {
+                    num += 10
+                } else if (roman[ch + 1] == 'L' || roman[ch + 1] == 'C' || roman[ch + 1] == 'D' || roman[ch + 1] == 'M') {
+                    num -= 10
+                } else return -1
+            }
+            'C' -> {
+                if (ch == roman.length - 1 || roman[ch + 1] == 'V' || roman[ch + 1] == 'I' || roman[ch + 1] == 'X' || roman[ch + 1] == 'L' || roman[ch + 1] == 'C') {
+                    num += 100
+                } else if (roman[ch + 1] == 'D' || roman[ch + 1] == 'M') {
+                    num -= 100
+                } else return -1
+            }
+
+            else -> return -1
+        }
+    }
+    return num
+}
+
+
+/*fun operationCancelBracket(brMap: Map<Int, Char>, start: Int) : Int {
+    var end: Int
+    if (brMap.getValue(start) == '[') {
+        var count: Int = 0
+        var pos: Int = brMap.
+        while ()
+    }
+
+    return end
+}*/
 /**
  * Очень сложная
  *
@@ -208,4 +294,53 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO() /*{
+    val arr = Array(cells, { 0 })
+    var pos: Int = cells / 2
+    var step: Int = 0
+
+    try {
+        val bracket = mutableMapOf<Int, Char>()
+        var open: Int = 0
+        var close: Int = 0
+
+        for (ind in 0..commands.length) {
+            var ch: Char = commands[ind]
+            when (ch) {
+                '[' -> {
+                    bracket.put(ind, ch)
+                    open++
+                }
+                ']' -> {
+                    bracket.put(ind, ch)
+                    close++
+                }
+            };
+        }
+        if (open != close)
+            throw IllegalArgumentException("Missing  [ or ]")
+
+        while (step < limit && step < commands.length) {
+            var cmd: Char = commands[step]
+            if (pos > cells)
+                throw IllegalStateException("Out of range")
+            when (cmd) {
+                '>' -> pos++
+                '<' -> pos--
+                '+' -> arr[pos]++
+                '-' -> arr[pos]--
+                else -> throw IllegalArgumentException("Arg")
+            }
+            step++
+        }
+        for (ch in commands)
+            if (ch != '<' && ch != '>' && ch != '+' && ch != '-' && ch != ' ' && ch != '[' && ch != ']')
+                throw IllegalArgumentException("Arg")
+    } catch (e: IllegalArgumentException) {
+        println("Not correct input")
+    } catch (e: IllegalStateException) {
+        println("Sensor out of range")
+    }
+    return arr.toList()
+}
+*/
