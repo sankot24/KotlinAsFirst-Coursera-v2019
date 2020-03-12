@@ -2,6 +2,10 @@
 
 package lesson7.task1
 
+import lesson1.task1.accountInThreeYears
+import lesson1.task1.numberRevert
+import lesson1.task1.quadraticRootProduct
+import lesson8.task1.lineByPoints
 import java.io.File
 
 /**
@@ -70,7 +74,37 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    TODO()
+    val outputStream = File(outputName).bufferedWriter()
+
+    for (line in File(inputName).readLines()) {
+        var i: Int = 0
+        while (i < line.length) {
+            if ((line[i] != 'Ж' && line[i] != 'ж') && (line[i] != 'Ч' && line[i] != 'ч') && (line[i] != 'Ш' && line[i] != 'ш') && (line[i] != 'Щ' && line[i] != 'щ'))
+                outputStream.append(line[i])
+            else if (i + 1 < line.length && line[i + 1] != 'ы' && line[i + 1] != 'я' && line[i + 1] != 'ю' && line[i + 1] != 'Ы' && line[i + 1] != 'Я' && line[i + 1] != 'Ю')
+                outputStream.append(line[i])
+            else {
+                if (i + 1 == line.length) {
+                    outputStream.append(line[i])
+                    break;
+                }
+                outputStream.append(line[i])
+                when (line[i + 1]) {
+                    'ы' -> outputStream.append('и')
+                    'ю' -> outputStream.append('у')
+                    'я' -> outputStream.append('а')
+                    'Ы' -> outputStream.append('И')
+                    'Ю' -> outputStream.append('У')
+                    else -> outputStream.append('А')
+                }
+                i++
+            }
+            i++
+        }
+        outputStream.newLine()
+    }
+
+    outputStream.close()
 }
 
 /**
@@ -244,15 +278,15 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  *
  * Соответствующий выходной файл:
 <html>
-    <body>
-        <p>
-            Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
-            Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
-        </p>
-        <p>
-            Suspendisse <s>et elit in enim tempus iaculis</s>.
-        </p>
-    </body>
+<body>
+<p>
+Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
+Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
+</p>
+<p>
+Suspendisse <s>et elit in enim tempus iaculis</s>.
+</p>
+</body>
 </html>
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
@@ -295,67 +329,67 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  *
  * Пример входного файла:
 ///////////////////////////////начало файла/////////////////////////////////////////////////////////////////////////////
-* Утка по-пекински
-    * Утка
-    * Соус
-* Салат Оливье
-    1. Мясо
-        * Или колбаса
-    2. Майонез
-    3. Картофель
-    4. Что-то там ещё
-* Помидоры
-* Фрукты
-    1. Бананы
-    23. Яблоки
-        1. Красные
-        2. Зелёные
+ * Утка по-пекински
+ * Утка
+ * Соус
+ * Салат Оливье
+1. Мясо
+ * Или колбаса
+2. Майонез
+3. Картофель
+4. Что-то там ещё
+ * Помидоры
+ * Фрукты
+1. Бананы
+23. Яблоки
+1. Красные
+2. Зелёные
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  *
  *
  * Соответствующий выходной файл:
 ///////////////////////////////начало файла/////////////////////////////////////////////////////////////////////////////
 <html>
-  <body>
-    <ul>
-      <li>
-        Утка по-пекински
-        <ul>
-          <li>Утка</li>
-          <li>Соус</li>
-        </ul>
-      </li>
-      <li>
-        Салат Оливье
-        <ol>
-          <li>Мясо
-            <ul>
-              <li>
-                  Или колбаса
-              </li>
-            </ul>
-          </li>
-          <li>Майонез</li>
-          <li>Картофель</li>
-          <li>Что-то там ещё</li>
-        </ol>
-      </li>
-      <li>Помидоры</li>
-      <li>
-        Фрукты
-        <ol>
-          <li>Бананы</li>
-          <li>
-            Яблоки
-            <ol>
-              <li>Красные</li>
-              <li>Зелёные</li>
-            </ol>
-          </li>
-        </ol>
-      </li>
-    </ul>
-  </body>
+<body>
+<ul>
+<li>
+Утка по-пекински
+<ul>
+<li>Утка</li>
+<li>Соус</li>
+</ul>
+</li>
+<li>
+Салат Оливье
+<ol>
+<li>Мясо
+<ul>
+<li>
+Или колбаса
+</li>
+</ul>
+</li>
+<li>Майонез</li>
+<li>Картофель</li>
+<li>Что-то там ещё</li>
+</ol>
+</li>
+<li>Помидоры</li>
+<li>
+Фрукты
+<ol>
+<li>Бананы</li>
+<li>
+Яблоки
+<ol>
+<li>Красные</li>
+<li>Зелёные</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+</body>
 </html>
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
@@ -376,35 +410,247 @@ fun markdownToHtml(inputName: String, outputName: String) {
     TODO()
 }
 
+fun main() {
+    val lhv: Int = 2678
+    val rhv: Int = 38648
+    val lenRhv: Int = numCounter(rhv)
+    val lenLhv: Int = numCounter(lhv)
+    var lenStr: Int = lenRhv + lenLhv
+    var h: Int = 0
+
+    while (h < lenRhv) {
+        if (numCounter(pow( 10, h) * numGetter(rhv, lenRhv - h) * lhv) + 1 > lenStr)
+            lenStr = numCounter(pow(10, h) * numGetter(rhv, lenRhv - h) * lhv) + 1
+        h++
+    }
+
+    if (numCounter(lhv * rhv) + 1 > lenStr)
+        lenStr = numCounter(lhv * rhv) + 1
+
+    // первая строка
+    for (i in 0 until lenStr - lenLhv)
+        print(" ")
+    println("$lhv")
+
+    // вторая стока
+    print("*")
+    for (i in 0 until lenStr - lenRhv - 1)
+        print(" ")
+    println("$rhv")
+
+    // третья строка
+    for (i in 0 until lenStr)
+        print("-")
+    println()
+
+    // четвертая (первое слагаемое)
+    var step: Int = numGetter(rhv, lenRhv) * lhv
+    var lenStep: Int = numCounter(step)
+
+    for (i in 0 until lenStr - lenStep)
+        print(" ")
+    println("$step")
+
+    if (lenRhv == 1) {
+        for (i in 0 until lenStr)
+            print("-")
+        println()
+
+        for (i in 0 until lenStr - lenStep)
+            print(" ")
+        println("$step")
+    } else {
+        var sum: Int = step
+        h = 1
+
+        while (h < lenRhv) {
+            step = numGetter(rhv, lenRhv - h) * lhv
+            lenStep = numCounter(step)
+            sum += step * pow(10, h)
+
+            print("+")
+            for (i in 0 until lenStr - lenStep - h - 1)
+                print(" ")
+            println("$step")
+            h++
+        }
+
+        for (i in 0 until lenStr)
+            print("-")
+        println()
+
+        for (i in 0 until lenStr - numCounter(sum))
+            print(" ")
+        println("$sum")
+    }
+}
+
+fun pow(footing: Int, degree: Int): Int {
+    var ans: Int = 1
+
+    for (i in 1..degree)
+        ans *= footing
+
+    return ans
+}
+
 /**
  * Средняя
  *
  * Вывести в выходной файл процесс умножения столбиком числа lhv (> 0) на число rhv (> 0).
  *
  * Пример (для lhv == 19935, rhv == 111):
-   19935
-*    111
+19935
+ *    111
 --------
-   19935
+19935
 + 19935
 +19935
 --------
- 2212785
+2212785
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  * Нули в множителе обрабатывать так же, как и остальные цифры:
-  235
-*  10
+235
+ *  10
 -----
-    0
+0
 +235
 -----
- 2350
+2350
  *
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    val lenRhv: Int = numCounter(rhv)
+    val lenLhv: Int = numCounter(lhv)
+    var lenStr: Int = lenRhv + lenLhv
+    var h: Int = 0
+    val outputStream = File(outputName).bufferedWriter()
+
+    while (h < lenRhv) {
+        if (numCounter(pow( 10, h) * numGetter(rhv, lenRhv - h) * lhv) + 1 > lenStr)
+            lenStr = numCounter(pow(10, h) * numGetter(rhv, lenRhv - h) * lhv) + 1
+        h++
+    }
+
+    if (numCounter(lhv * rhv) + 1 > lenStr)
+        lenStr = numCounter(lhv * rhv) + 1
+
+    // первая строка
+    for (i in 0 until lenStr - lenLhv)
+        outputStream.write(" ")
+    outputStream.write("$lhv")
+    outputStream.newLine()
+
+    // вторая стока
+    outputStream.write("*")
+    for (i in 0 until lenStr - lenRhv - 1)
+        outputStream.write(" ")
+    outputStream.write("$rhv")
+    outputStream.newLine()
+
+    // третья строка
+    for (i in 0 until lenStr)
+        outputStream.write("-")
+    outputStream.newLine()
+
+    // четвертая (первое слагаемое)
+    var step: Int = numGetter(rhv, lenRhv) * lhv
+    var lenStep: Int = numCounter(step)
+
+    for (i in 0 until lenStr - lenStep)
+        outputStream.write(" ")
+    outputStream.write("$step")
+    outputStream.newLine()
+
+    if (lenRhv == 1) {
+        for (i in 0 until lenStr)
+            outputStream.write("-")
+        outputStream.newLine()
+
+        for (i in 0 until lenStr - lenStep)
+            outputStream.write(" ")
+        outputStream.write("$step")
+        outputStream.close()
+    } else {
+        var sum: Int = step
+        h = 1
+
+        while (h < lenRhv) {
+            step = numGetter(rhv, lenRhv - h) * lhv
+            lenStep = numCounter(step)
+            sum += step * pow(10, h)
+
+            outputStream.write("+")
+            for (i in 0 until lenStr - lenStep - h - 1)
+                outputStream.write(" ")
+            outputStream.write("$step")
+            outputStream.newLine()
+            h++
+        }
+
+        for (i in 0 until lenStr)
+            outputStream.write("-")
+        outputStream.newLine()
+
+        for (i in 0 until lenStr - numCounter(sum))
+            outputStream.write(" ")
+        outputStream.write("$sum")
+        outputStream.newLine()
+
+        outputStream.close()
+    }
 }
 
+/**
+ * Вспомогательная
+ *
+ * Считает количество цифр в числе.
+ */
+fun numCounter(n: Int): Int {
+    var count: Int = 0;
+    var num: Int = n;
+
+    if (num == 0)
+        return 1
+
+    while (num > 0) {
+        num /= 10;
+        count++;
+    }
+    return count;
+}
+
+/**
+ * Вспомогательная
+ *
+ * Возвращает конкретную цифру с позиции pos, считая от начала числа.
+ */
+fun numGetter(n: Int, pos: Int): Int {
+    var count: Int = numCounter(n);
+    var num: Int = n;
+
+    while (count > pos) {
+        num /= 10;
+        count--;
+    }
+    return num % 10;
+}
+
+/**
+ * Вспомогательная
+ *
+ * Возвращает кусок числа от начала.
+ */
+fun numExtract(n: Int, len: Int, N: Int): Int {
+    var num: Int = n;
+    var lenn: Int = len
+
+    while (lenn > N) { // <=
+        num /= 10;
+        lenn--;
+    }
+    return num;
+}
 
 /**
  * Сложная
@@ -412,21 +658,56 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  * Вывести в выходной файл процесс деления столбиком числа lhv (> 0) на число rhv (> 0).
  *
  * Пример (для lhv == 19935, rhv == 22):
-  19935 | 22
- -198     906
- ----
-    13
-    -0
-    --
-    135
-   -132
-   ----
-      3
+19935 | 22
+-198     906
+----
+13
+-0
+--
+135
+-132
+----
+3
 
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     TODO()
+    /*   val outputStream = File(outputName).bufferedWriter()
+    var answer: Int = lhv / rhv
+    var remain: Int = 0
+    var lenL: Int = numCounter(lhv)
+    var step : Int = 0
+    var lenStep : Int = 0
+    var shift = 2
+
+    // первая строка
+    outputStream.write("  $lhv | $rhv")
+    outputStream.newLine()
+
+    step = rhv * numGetter(answer, 0)
+    lenStep = numCounter(step)
+    remain = numExtract(lhv, lenL, lenStep) - step
+    if (remain >= 0)
+        outputStream.write(" -$step")
+    else {
+        var ss = 1
+
+        outputStream.write("-$step")
+    }
+
+    for (i in 0..lenL - numCounter(step)) // mb 1
+        outputStream.write(" ")
+    outputStream.write("  $answer")
+    outputStream.newLine()
+    outputStream.write(" ")
+    for (i in 0..lenStep) // mb +-1
+        outputStream.write("-")
+    outputStream.newLine()
+    remain = numExtract(lhv, lenL, lenStep) - step
+    
+
+    outputStream.close()*/
 }
 
